@@ -1,0 +1,61 @@
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  neo4j:
+    image: bitnami/neo4j:5.26.10
+    container_name: neo4j
+    networks:
+      - app-network
+    ports:
+      - "7474:7474" # HTTP Browser
+      - "7473:7473" # HTTPS
+      - "7687:7687" # Bolt protocol
+    environment:
+      NEO4J_PASSWORD: thesis
+    volumes:
+      - neo4j_data:/bitnami
+
+  grafana:
+    image: grafana/grafana-enterprise:latest
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../config/grafana.yml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=password
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v3.5.0
+    volumes:
+      - ../config/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+
+  # # TODO: Posible to delete due to not necesarry for the experiment
+  # rabbitmq:
+  #   image: bitnami/rabbitmq:4.1.3
+  #   container_name: rabbitmq
+  #   networks:
+  #     - app-network
+  #   ports:
+  #     - "5672:5672"   # AMQP protocol
+  #     - "15672:15672" # Management UI
+  #   environment:
+  #     RABBITMQ_USERNAME: user
+  #     RABBITMQ_PASSWORD: thesis
+  #     RABBITMQ_LOOPBACK_USERS: "none" # permite login desde fuera del contenedor
+  #   volumes:
+  #     - rabbitmq_data:/bitnami/rabbitmq
+
+volumes:
+  neo4j_data:
+    driver: local
+  grafana_data:
+  # rabbitmq_data:
+  #   driver: local

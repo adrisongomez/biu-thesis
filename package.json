@@ -1,0 +1,10 @@
+{
+  "name": "thesis",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Adrison Gomez <agomez@resonance.nyc>",
+  "license": "MIT",
+  "devDependencies": {
+    "k6": "^0.0.0"
+  }
+}

@@ -1,0 +1,13 @@
+import http from 'k6/http'
+import {sleep} from 'k6'
+
+export const options = {
+    iterations: 1000,   
+    vus: 5,
+    batch: 500,
+}
+
+export default function () {
+    http.get("http://localhost:1323/")
+    sleep(0.01)
+}
