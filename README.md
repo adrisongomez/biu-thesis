@@ -4,7 +4,7 @@
 
 This is a repository which hold a software for the master thesis at BIU University:
 
-### Topic:
+### Topic
 
 Diseño e Implementación de Herramienta basado en Grafos para el Monitoreo de Microservicios
 
