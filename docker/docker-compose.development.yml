@@ -47,7 +47,7 @@ services:
       - ./tempo-data:/var/tempo
     ports:
       - "3200" # tempo
-      - "4317" # otlp grpc
+      # - "4317" # otlp grpc
     depends_on:
       - init
 

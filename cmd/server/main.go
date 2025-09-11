@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	m "github.com/adrisongomez/thesis/libs/middleware"
 	"github.com/adrisongomez/thesis/config"
+	m "github.com/adrisongomez/thesis/libs/middleware"
 	"github.com/adrisongomez/thesis/libs/opentelemetry"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -16,7 +16,7 @@ import (
 
 func main() {
 	ctx := context.Background()
-	cfg, err := config.NewConfig("./.env")
+	cfg, err := config.NewTelemetryConfig("./.env")
 	if err != nil {
 		log.Fatalf("error reading configuration %d", err)
 		return

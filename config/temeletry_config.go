@@ -1,8 +1,6 @@
 package config
 
 import (
-	"log"
-
 	"github.com/spf13/viper"
 )
 
@@ -15,21 +13,16 @@ type TelemetryConfig struct {
 	MetricCollectorURL string `mapstructure:"OTEL_METRIC_COLLECTOR_URL"`
 }
 
-
-func NewConfig(pathToConfig string) (*TelemetryConfig, error) {
-	cfg := TelemetryConfig{ }
+func NewTelemetryConfig(pathToConfig string) (*TelemetryConfig, error) {
 	viper.SetConfigFile(pathToConfig)
-
 	err := viper.ReadInConfig()
-
 	if err != nil {
 		return nil, err
 	}
-	err = viper.Unmarshal(&cfg)
-
+	cfg := &TelemetryConfig{}
+	err = viper.Unmarshal(cfg)
 	if err != nil {
-		log.Println("Here Daddy")
 		return nil, err
 	}
-	return &cfg, nil
+	return cfg, nil
 }

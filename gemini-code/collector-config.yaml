@@ -1,0 +1,38 @@
+# This configuration file tells the OpenTelemetry Collector how to behave.
+
+receivers:
+  # This receiver accepts OTLP data over gRPC (port 4317) and HTTP (port 4318)
+  # Applications will send their telemetry data to these ports.
+  otlp:
+    protocols:
+      grpc:
+      http:
+
+exporters:
+  # This exporter sends data to our custom Go service.
+  # It's configured to send OTLP data via gRPC to localhost:4317.
+  otlp:
+    endpoint: localhost:4317
+    tls:
+      # For local development, we disable TLS.
+      # In a production environment, you should configure TLS certificates.
+      insecure: true
+
+  # We can also add a logging exporter to see the traces in the collector's console.
+  # This is useful for debugging.
+  logging:
+    verbosity: detailed
+
+processors:
+  # The batch processor groups telemetry data before sending it.
+  # This is a standard performance optimization.
+  batch:
+
+service:
+  pipelines:
+    # A pipeline defines the path data takes from receiver to exporter.
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      # Data will be sent to both our custom service (otlp) and the console (logging).
+      exporters: [otlp, logging]

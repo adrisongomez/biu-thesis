@@ -2,13 +2,20 @@ receivers:
   otlp:
     protocols:
       grpc:
+      http:
 exporters:
   otlp:
-    endpoint: tempo:4317
+    endpoint: host.docker.internal:4318
+    # endpoint: tempo:4317
     tls:
       insecure: true
+  logging:
+    verbosity: detailed
+processors:
+  batch:
 service:
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [otlp]
+      processors: [batch]
+      exporters: [otlp, logging]
