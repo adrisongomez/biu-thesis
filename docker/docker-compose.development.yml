@@ -23,7 +23,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ../config/grafana.yml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ../config/shared/grafana.yml:/etc/grafana/provisioning/datasources/datasource.yaml
       - grafana_data:/var/lib/grafana
     environment:
       - GF_SECURITY_ADMIN_USER=admin
@@ -43,7 +43,7 @@ services:
     image: grafana/tempo:latest
     command: [ "-config.file=/etc/tempo.yaml" ]
     volumes:
-      - ../config/tempo.yml:/etc/tempo.yaml
+      - ../config/shared/tempo.yml:/etc/tempo.yaml
       - ./tempo-data:/var/tempo
     ports:
       - "3200" # tempo
@@ -55,7 +55,7 @@ services:
     image: otel/opentelemetry-collector:0.86.0
     command: [ "--config=/etc/otel-collector.yaml" ]
     volumes:
-      - ../config/otel-collector.yml:/etc/otel-collector.yaml
+      - ../config/shared/otel-collector.yml:/etc/otel-collector.yaml
     ports:
       - "4317:4317" 
 
@@ -63,7 +63,7 @@ services:
     container_name: prometheus
     image: prom/prometheus:v3.5.0
     volumes:
-      - ../config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ../config/shared/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - 9090:9090
 
