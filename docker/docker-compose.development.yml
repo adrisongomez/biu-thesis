@@ -1,19 +1,13 @@
-networks:
-  app-network:
-    driver: bridge
-
 services:
   neo4j:
     image: bitnami/neo4j:5.26.10
     container_name: neo4j
-    networks:
-      - app-network
     ports:
       - "7474:7474" # HTTP Browser
       - "7473:7473" # HTTPS
       - "7687:7687" # Bolt protocol
     environment:
-      NEO4J_PASSWORD: thesis
+      -  NEO4J_PASSWORD=thesis
     volumes:
       - neo4j_data:/bitnami
 

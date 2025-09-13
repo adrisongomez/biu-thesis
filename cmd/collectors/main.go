@@ -50,7 +50,7 @@ func main() {
 		return
 	}
 
-	logger.Infof("OTLP trace receiver listening on gRPC port %s", cfg.ServicePort)
+	logger.Infow("OTLP trace receiver listening on gRPC", "port", cfg.ServicePort)
 	if err := s.Serve(lis); err != nil {
 		logger.Errorf("failed to serve: %v", err)
 	}

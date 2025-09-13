@@ -6,7 +6,7 @@ import (
 )
 
 type Neo4jBackendConfig struct {
-	ServicePort string `mapstrucutre:"SERVICE_PORT" default:"4317"`
+	ServicePort string `mapstructure:"SERVICE_PORT"`
 	DbUserName  string `mapstructure:"DB_USERNAME"`
 	DbPassword  string `mapstructure:"DB_PASSWORD"`
 	DbUrl       string `mapstructure:"DB_URI"`
@@ -27,5 +27,6 @@ func NewDatabaseConfig(pathToConfig string) (*Neo4jBackendConfig, error) {
 		logger.Warnf("Some error got caught unmarshing the database config %s", pathToConfig)
 		return nil, err
 	}
+	logger.Infow("DatabaseConfig loaded", "ServicePort", cfg.ServicePort, "DbUserName", cfg.DbUserName, "DbUrl", cfg.DbUrl)
 	return cfg, nil
 }

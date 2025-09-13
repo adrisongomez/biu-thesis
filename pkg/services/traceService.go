@@ -19,7 +19,7 @@ type TraceServiceServer struct {
 }
 
 func (s *TraceServiceServer) Export(ctx context.Context, req *traceService.ExportTraceServiceRequest) (*traceService.ExportTraceServiceResponse, error) {
-	s.lg.Infow("TraceServiceServer#Export got called with", "context", ctx, "req", req)
+	s.lg.Infow("TraceServiceServer#Export got called with", "req", req.String())
 	spansToSave := []models.SpanNode{}
 	servicesToSave := make(map[string]models.ServiceNode)
 	tracesToSave := make(map[string]models.TraceNode)

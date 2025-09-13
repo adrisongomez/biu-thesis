@@ -26,7 +26,7 @@ func (db *Neo4jConnector) Close(ctx context.Context) error {
 
 func (db *Neo4jConnector) Connect(ctx context.Context) error {
 	logger := db.logger
-	logger.Info("Neo4jConnector#Connect got called")
+	logger.Infow("Neo4jConnector#Connect got called", "uri", db.cfg.DbUrl, "username", db.cfg.DbUserName, "pw", db.cfg.DbPassword)
 	driver, err := neo4j.NewDriverWithContext(db.cfg.DbUrl, neo4j.BasicAuth(db.cfg.DbUserName, db.cfg.DbPassword, ""))
 	if err != nil {
 		logger.Warn("Error trying to connect with database")

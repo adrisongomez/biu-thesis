@@ -5,7 +5,7 @@ import (
 )
 
 func NewLogger() (*zap.SugaredLogger, error) {
-	logger, err := zap.NewProduction()
+	logger, err := zap.NewDevelopment()
 	if err != nil {
 		return nil, err
 	}

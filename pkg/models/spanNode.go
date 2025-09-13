@@ -21,7 +21,8 @@ type SpanNode struct {
 }
 
 func (s *SpanNode) Raw() map[string]any {
-	return map[string]any{
+	resp := map[string]any{
+		"id":                s.SpanID,
 		"traceId":           s.TraceID,
 		"spanId":            s.SpanID,
 		"parentSpanId":      s.ParentSpanID,
@@ -31,8 +32,16 @@ func (s *SpanNode) Raw() map[string]any {
 		"startTimeUnixNano": s.StartTimeUnixNano,
 		"endTimeUnixNano":   s.EndTimeUnixNano,
 		"durationNanos":     s.DurationNanos,
-		"attributes":        s.Attributes,
 	}
+
+	for k, v := range s.Attributes {
+		if _, ok := resp[k]; ok {
+			continue
+		}
+		resp[k] = v
+	}
+
+	return resp
 }
 
 func NewSpanNodeFromV1Span(span *trace.Span, serviceName string) SpanNode {

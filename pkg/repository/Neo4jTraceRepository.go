@@ -48,8 +48,16 @@ func (r *Neo4jTraceRepository) SaveBatch(ctx context.Context, spans []models.Spa
 			r.logger.Error("CreateSpans got an error", err)
 			return nil, err
 		}
-		if _, err := tx.Run(ctx, CREATE_RELATIONSHIPS, map[string]any{"spans": rawSpans}); err != nil {
-			r.logger.Error("CreateRelationships got an error", err)
+		if _, err := tx.Run(ctx, CREATE_LINK_SERVICES, map[string]any{"spans": rawSpans}); err != nil {
+			r.logger.Error("CreateLinkServices got an error", err)
+			return nil, err
+		}
+		if _, err := tx.Run(ctx, CREATE_LINK_PARENT_TO_CHILD, map[string]any{"spans": rawSpans}); err != nil {
+			r.logger.Error("CreateLinkParentToChild got an error", err)
+			return nil, err
+		}
+		if _, err := tx.Run(ctx, CREATE_LINK_TRACE_TO_SPAN, map[string]any{"spans": rawSpans}); err != nil {
+			r.logger.Error("CreateLinkTraceToSpan got an error", err)
 			return nil, err
 		}
 		return nil, nil
@@ -59,7 +67,7 @@ func (r *Neo4jTraceRepository) SaveBatch(ctx context.Context, spans []models.Spa
 		r.logger.Error("Neo4j#ExecuteWrite got an error", err)
 		return fmt.Errorf("failed to execute batch write transaction: %w", err)
 	}
-	r.logger.Info("Successfully wrote %d spans, %d services, and %d traces to Neo4j.", len(spans), len(services), len(traces))
+	r.logger.Infof("Successfully wrote %d spans, %d services, and %d traces to Neo4j.", len(spans), len(services), len(traces))
 	return nil
 }
 
