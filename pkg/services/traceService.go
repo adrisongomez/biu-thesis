@@ -8,18 +8,22 @@ import (
 	"github.com/adrisongomez/thesis/pkg/repository"
 	traceService "go.opentelemetry.io/proto/otlp/collector/trace/v1"
 	resource "go.opentelemetry.io/proto/otlp/resource/v1"
+	"go.uber.org/zap"
 	_ "google.golang.org/grpc/encoding/gzip"
 )
 
 type TraceServiceServer struct {
+	lg   *zap.SugaredLogger
 	repo repository.TraceRepository
 	traceService.UnimplementedTraceServiceServer
 }
 
 func (s *TraceServiceServer) Export(ctx context.Context, req *traceService.ExportTraceServiceRequest) (*traceService.ExportTraceServiceResponse, error) {
+	s.lg.Infow("TraceServiceServer#Export got called with", "context", ctx, "req", req)
 	spansToSave := []models.SpanNode{}
 	servicesToSave := make(map[string]models.ServiceNode)
 	tracesToSave := make(map[string]models.TraceNode)
+	s.lg.Info("TraceServiceServer#Export extracting data from req")
 	for _, rs := range req.GetResourceSpans() {
 		serviceName := getServiceName(rs.GetResource())
 		if _, ok := servicesToSave[serviceName]; !ok {
@@ -37,6 +41,7 @@ func (s *TraceServiceServer) Export(ctx context.Context, req *traceService.Expor
 		}
 	}
 
+	s.lg.Info("TraceServiceServer#Export calling repository to save the data")
 	if len(spansToSave) > 0 {
 		if err := s.repo.SaveBatch(ctx, spansToSave, servicesToSave, tracesToSave); err != nil {
 			log.Printf("Error saving batch to Neo4j: %v", err)
@@ -46,10 +51,14 @@ func (s *TraceServiceServer) Export(ctx context.Context, req *traceService.Expor
 }
 
 func NewTraceServiceServer(repo repository.TraceRepository) *TraceServiceServer {
-	return &TraceServiceServer{repo: repo}
+	logger := zap.L().Sugar()
+	logger.Info("NewTraceServiceServer got called with")
+	return &TraceServiceServer{repo: repo, lg: logger}
 }
 
 func getServiceName(res *resource.Resource) string {
+	logger := zap.L().Sugar()
+	logger.Info("getServiceName got called")
 	for _, attr := range res.GetAttributes() {
 		if attr.GetKey() == "service.name" {
 			return attr.GetValue().GetStringValue()

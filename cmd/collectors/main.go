@@ -7,6 +7,7 @@ import (
 
 	"github.com/adrisongomez/thesis/config"
 	"github.com/adrisongomez/thesis/libs/databases"
+	"github.com/adrisongomez/thesis/libs/loggers"
 	"github.com/adrisongomez/thesis/pkg/repository"
 	"github.com/adrisongomez/thesis/pkg/services"
 	traceService "go.opentelemetry.io/proto/otlp/collector/trace/v1"
@@ -17,16 +18,22 @@ import (
 
 func main() {
 	ctx := context.Background()
+	logger, err := loggers.NewLogger()
+	if err != nil {
+		log.Fatalf("Error trying to initilizing the logger: %v", err)
+		return
+	}
+	defer logger.Sync()
 	cfg, err := config.NewDatabaseConfig(".env")
 	if err != nil {
-		log.Fatalf("Error trying to load the environment variable from config file %v", err)
+		logger.Errorf("Error trying to load the environment variable from config file %v", err)
 		return
 	}
 
 	conn := databases.NewNeo4jConnector(cfg)
 	err = conn.Connect(ctx)
 	if err != nil {
-		log.Fatalf("Error while trying to connect with Neo4j Database %v", err)
+		logger.Errorf("Error while trying to connect with Neo4j Database %v", err)
 		return
 	}
 	defer conn.Close(ctx)
@@ -39,12 +46,12 @@ func main() {
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", cfg.ServicePort))
 
 	if err != nil {
-		log.Fatalf("Error trying to open listener for port %s - %v", cfg.ServicePort, err)
+		logger.Errorf("Error trying to open listener for port %s - %v", cfg.ServicePort, err)
 		return
 	}
 
-	log.Printf("OTLP trace receiver listening on gRPC port %s", cfg.ServicePort)
+	logger.Infof("OTLP trace receiver listening on gRPC port %s", cfg.ServicePort)
 	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		logger.Errorf("failed to serve: %v", err)
 	}
 }
