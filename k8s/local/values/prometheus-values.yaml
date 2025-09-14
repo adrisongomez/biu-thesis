@@ -1,4 +1,18 @@
 # helm-values/tempo-values.yaml
+grafana:
+  # Tell Grafana to use an existing secret for its admin credentials
+  admin:
+    existingSecret: "grafana-admin-credentials"
+    userKey: "admin_user"
+    passwordKey: "admin_password"
+
+  # The rest of your Grafana config, like the Tempo datasource, stays the same
+  additionalDataSources:
+    - name: "Tempo"
+      type: "tempo"
+      url: "http://tempo.monitoring.svc.cluster.local:3200"
+      access: "proxy"
+      isDefault: false
 
 storage:
   trace:
