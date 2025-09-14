@@ -1,0 +1,37 @@
+# kubeforward.yaml
+
+# This section tells kubeforward which kubeconfig context to use.
+# It should match the output from `kubectl config get-contexts`.
+context: minikube
+
+# A list of all the services we want to forward.
+forwards:
+  # 1. Grafana
+  - service: prometheus-stack-grafana
+    namespace: monitoring
+    port: 80 # The port on the Kubernetes service
+    localPort: 3000 # The port you will access on localhost
+  
+  # 2. Prometheus
+  - service: prometheus-stack-kube-prom-prometheus
+    namespace: monitoring
+    port: 9090
+    localPort: 9090
+
+  # 3. Neo4j Browser and Bolt Port
+  - service: neo4j-database-neo4j
+    namespace: neo4j
+    # You can forward multiple ports from the same service
+    aliases:
+      - name: "neo4j-browser"
+        port: 7474
+        localPort: 7474
+      - name: "neo4j-bolt"
+        port: 7687
+        localPort: 7687
+
+  # 4. Tempo
+  - service: tempo
+    namespace: monitoring
+    port: 3200
+    localPort: 3200

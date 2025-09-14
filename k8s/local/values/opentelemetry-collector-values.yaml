@@ -1,0 +1,44 @@
+# We'll run the collector as a DaemonSet, meaning one instance per Kubernetes node.
+mode: "daemonset"
+
+# This defines the collector's pipeline: receivers -> processors -> exporters
+config:
+  receivers:
+    otlp: # OpenTelemetry Line Protocol receiver
+      protocols:
+        grpc: # For OTLP trace and metric data
+        http: # For OTLP trace and metric data
+
+  processors:
+    batch: # Batches data to improve compression and reduce network calls
+
+  exporters:
+    # 1. Export traces to Tempo
+    otlp/tempo:
+      endpoint: "tempo.monitoring.svc.cluster.local:4317" # Kubernetes service name for Tempo
+      tls:
+        insecure: true # Required for local cluster communication
+
+    # 2. Make metrics available for Prometheus to scrape
+    prometheus:
+      endpoint: "0.0.0.0:8889" # The address the prometheus exporter will listen on
+
+  service:
+    pipelines:
+      # The TRACES pipeline
+      traces:
+        receivers: [otlp]
+        processors: [batch]
+        exporters: [otlp/tempo]
+      # The METRICS pipeline
+      metrics:
+        receivers: [otlp]
+        processors: [batch]
+        exporters: [prometheus]
+
+# These annotations are crucial! They tell the Prometheus Operator to automatically
+# discover this service and start scraping metrics from it.
+service:
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8889"

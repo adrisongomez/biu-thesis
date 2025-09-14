@@ -1,6 +1,26 @@
 .env.*
 !.env.example
 
+# Local Terraform files
+**/.terraform/
+**/.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfplan
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI configuration files
+.terraformrc
+terraform.rc
+
 /**/.env
 
-tempo-data/
+/**/tempo-data/
