@@ -20,12 +20,3 @@ Diseño e Implementación de Herramienta basado en Grafos para el Monitoreo de M
 
 K6 is an open source tool which can be use to generate fake traffic to an API and generate reports like avg, min, med, max, p[90], p[95].
 So it's a benchmarking tool for services
-
-## TODO
-
-- [ ] Instrument the app using Gotel
-- [ ] Run grafana tempo
-- [ ] Run experiment with grafana tempo
-- [ ] Build my own collector with Neo4j
-- [ ] Build Query API where grafana can read a JSON for a given traceId and generate a node grafana and simple graphs
-
