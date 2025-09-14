@@ -1,0 +1,31 @@
+# values/neo4j-values.minikube.yaml
+
+# Importante: basarse en neo4j-values.base.yaml (si usas helm -f multiple files, pon base primero)
+persistence:
+  enabled: true
+  size: 5Gi
+  # StorageClass típico en Minikube es "standard"; confirma con `kubectl get sc`
+  storageClass: "standard"
+
+resources:
+
+  requests:
+    memory: "1Gi"
+    cpu: "500m"
+  limits:
+    memory: "2Gi"
+    cpu: "1"
+
+# Reducir replicas en dev/local
+core:
+  replicaCount: 1
+
+# Relajar probes un poco porque en Minikube arranques pueden tardar
+startupProbe:
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  failureThreshold: 30
+
+securityContext:
+  enabled: false  # poner true solo si ves errores de permisos y conoces el uid/gid correctos
+
