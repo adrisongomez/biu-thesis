@@ -37,6 +37,9 @@ func main() {
 	// e.POST("/metrics", echo.WrapHandler(promhttp.Handler()))
 	// e.PUT("/metrics", echo.WrapHandler(promhttp.Handler()))
 	// e.DELETE("/metrics", echo.WrapHandler(promhttp.Handler()))
+	e.GET("/api/healthcheck", func(c echo.Context) error {
+		return c.String(http.StatusOK, "Check")
+	})
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
