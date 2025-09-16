@@ -1,7 +1,10 @@
 #! /bin/bash
 
 # build collector image
-docker build -t custom-collector . -f ./cmd/collectors/Dockerfile 
+docker build -t adrisongomez/custom-collector . -f ./cmd/collectors/Dockerfile 
 
 # build server image
-docker build -t server . -f ./cmd/server/Dockerfile 
+docker build -t adrisongomez/server . -f ./cmd/server/Dockerfile 
+
+docker push adrisongomez/custom-collector
+docker push adrisongomez/server

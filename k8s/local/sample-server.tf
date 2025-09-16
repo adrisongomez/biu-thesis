@@ -27,7 +27,7 @@ resource "kubernetes_deployment_v1" "sample_service_deployment" {
       spec {
         container {
           name  = "sample-service"
-          image = "server:latest"
+          image = "adrisongomez/server:latest"
           port {
             container_port = 5000
           }

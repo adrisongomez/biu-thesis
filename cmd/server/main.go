@@ -15,7 +15,7 @@ import (
 
 func main() {
 	ctx := context.Background()
-	cfg, err := config.NewTelemetryConfig("./.env")
+	cfg, err := config.NewTelemetryConfig(".env")
 	if err != nil {
 		log.Fatalf("error reading configuration %d", err)
 		return

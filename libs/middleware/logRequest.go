@@ -16,6 +16,11 @@ func LogRequest(tp opentelemetry.TelemetryProvider) echo.MiddlewareFunc {
 		tracer := tp.GetTracerProvider().Tracer(tp.GetServiceName())
 		propagator := otel.GetTextMapPropagator()
 		return func(c echo.Context) error {
+			path_value := c.Request().URL.Path
+
+			if path_value == "/api/healthcheck" {
+				return next(c)
+			}
 			// Extract the context from the incoming request's headers.
 			ctx := propagator.Extract(c.Request().Context(), propagation.HeaderCarrier(c.Request().Header))
 
