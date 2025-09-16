@@ -2,10 +2,11 @@
 # THIS VERSION HAS CORRECT SPACING
 
 # Corresponds to spec.mode
-mode: daemonset
+mode: deployment
 
 # Corresponds to spec.service.annotations
 service:
+  enabled: true
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "8889"
