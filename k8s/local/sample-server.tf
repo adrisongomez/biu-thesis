@@ -6,7 +6,8 @@ resource "kubernetes_namespace_v1" "sample_namespaces" {
 
 resource "kubernetes_deployment_v1" "sample_service_deployment" {
   metadata {
-    name = "sample-service-deployment"
+    namespace = "sample"
+    name      = "sample-service"
     labels = {
       app = "sample"
     }
@@ -30,6 +31,7 @@ resource "kubernetes_deployment_v1" "sample_service_deployment" {
           image = "adrisongomez/server:latest"
           port {
             container_port = 5000
+            host_port      = 5000
           }
           liveness_probe {
             http_get {
@@ -61,7 +63,7 @@ resource "kubernetes_service_v1" "sample-service" {
   spec {
     type = "ClusterIP"
     selector = {
-      app = "SampleService"
+      app = "sample"
     }
     port {
       port        = 5000
@@ -69,6 +71,6 @@ resource "kubernetes_service_v1" "sample-service" {
       protocol    = "TCP"
     }
   }
-  depends_on = [ kubernetes_namespace_v1.sample_namespaces ]
+  depends_on = [kubernetes_namespace_v1.sample_namespaces]
 
 }
