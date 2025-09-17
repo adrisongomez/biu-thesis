@@ -55,7 +55,7 @@ resource "kubernetes_deployment_v1" "sample_service_deployment" {
   }
 }
 
-resource "kubernetes_service_v1" "sample-service" {
+resource "kubernetes_service_v1" "sample_service_svc" {
   metadata {
     name      = "sample-service"
     namespace = "sample"

@@ -7,6 +7,6 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o ./custom-collector ./cmd/collectors
 FROM alpine:latest
 WORKDIR /
 COPY --from=builder /app/custom-collector /custom-collector
-COPY --from=builder /app/cmd/collector/.env /.env
+COPY --from=builder /app/cmd/collectors/.env /.env
 EXPOSE 4317
 CMD ["/custom-collector"]
