@@ -11,6 +11,12 @@ variable "grafana_admin_password" {
   sensitive   = true # This prevents the value from being shown in logs
 }
 
+resource "kubernetes_namespace_v1" "namespace_monitoring" {
+  metadata {
+    name = "monitoring"
+  }
+}
+
 resource "kubernetes_secret" "grafana_credentials" {
   metadata {
     name      = "grafana-admin-credentials"
@@ -23,15 +29,16 @@ resource "kubernetes_secret" "grafana_credentials" {
     admin_password = var.grafana_admin_password
   }
 
+  depends_on = [kubernetes_namespace_v1.namespace_monitoring]
+
 }
 
 resource "helm_release" "prometheus_stack" {
-  name             = "prometheus-stack"
-  repository       = "https://prometheus-community.github.io/helm-charts"
-  chart            = "kube-prometheus-stack"
-  version          = "51.6.0"
-  namespace        = "monitoring"
-  create_namespace = true
+  name       = "prometheus-stack"
+  repository = "https://prometheus-community.github.io/helm-charts"
+  chart      = "kube-prometheus-stack"
+  version    = "51.6.0"
+  namespace  = kubernetes_namespace_v1.namespace_monitoring.metadata[0].name
 
   values = [
     file("${path.module}/values/prometheus-values.yaml")

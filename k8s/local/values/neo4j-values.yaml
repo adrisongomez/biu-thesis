@@ -1,0 +1,29 @@
+# Accept the license agreement
+acceptLicenseAgreement: "yes"
+
+# Define the edition, password, and resources
+neo4j:
+  name: db
+  edition: "community"
+  password: "neo4j-test-password"
+  resources:
+    cpu: 0.5
+    memory: "2Gi"
+
+# Configure the startup probe to give the pod time to start
+startupProbe:
+  initialDelaySeconds: 30
+  failureThreshold: 100
+
+# Provide specific Neo4j configurations
+config:
+  dbms.default_database: "neo4j"
+  dbms.config.strict_validation: "true"
+
+# Define persistent volume settings
+volumes:
+  data:
+    mode: defaultStorageClass
+    defaultStorageClass:
+      requests:
+        storage: 2Gi
