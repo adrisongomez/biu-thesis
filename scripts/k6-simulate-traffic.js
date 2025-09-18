@@ -8,6 +8,6 @@ export const options = {
 }
 
 export default function () {
-    http.get("http://localhost:5000/")
+    http.get("http://sample-service.sample:5000/")
     sleep(0.01)
 }

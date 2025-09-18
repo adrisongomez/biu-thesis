@@ -7,9 +7,10 @@ mode: deployment
 # Corresponds to spec.service.annotations
 service:
   enabled: true
+  type: ClusterIP
   annotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "8889"
+    prometheus.io/port: "8888"
 
 # Corresponds to spec.config
 # All indentation here uses standard spaces.
@@ -27,6 +28,10 @@ config:
       verbosity: detailed
 
   service:
+    telemetry:
+      metrics:
+        address: "0.0.0.0:8888"
+        level: detailed
     pipelines:
       traces:
         receivers: [otlp]

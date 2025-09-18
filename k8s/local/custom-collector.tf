@@ -5,7 +5,7 @@ resource "kubernetes_namespace_v1" "custom_collector_ns" {
 }
 
 resource "kubernetes_deployment_v1" "custom_collector_deployment" {
-  depends_on = [kubernetes_namespace_v1.custom_collector_ns]
+  depends_on = [kubernetes_namespace_v1.custom_collector_ns, helm_release.neo4j]
 
   metadata {
     namespace = "custom-collector"
