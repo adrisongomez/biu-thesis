@@ -7,17 +7,16 @@ mode: deployment
 # Corresponds to spec.service.annotations
 service:
   enabled: true
-  type: ClusterIP
   annotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "8888"
+    prometheus.io/port: "8889"
 
 # Corresponds to spec.config
 # All indentation here uses standard spaces.
 config:
   exporters:
-    otlp/tempo:
-      endpoint: "tempo.monitoring.svc.cluster.local:4317"
+    otlp/custom:
+      endpoint: "custom-collector.custom-collector.svc.cluster.local:4317"
       tls:
         insecure: true
     
@@ -28,15 +27,11 @@ config:
       verbosity: detailed
 
   service:
-    telemetry:
-      metrics:
-        address: "0.0.0.0:8888"
-        level: detailed
     pipelines:
       traces:
         receivers: [otlp]
         processors: [batch]
-        exporters: [otlp/tempo, logging]
+        exporters: [otlp/custom, logging]
       metrics:
         receivers: [otlp]
         processors: [batch]
