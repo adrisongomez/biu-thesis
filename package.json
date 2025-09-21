@@ -4,7 +4,10 @@
   "main": "index.js",
   "author": "Adrison Gomez <agomez@resonance.nyc>",
   "license": "MIT",
-  "devDependencies": {
+  "scripts": {
+    "runner": "k6 run ./scripts/k6-simulate-traffic.js"
+  },
+  "dependencies": {
     "k6": "^0.0.0"
   }
 }

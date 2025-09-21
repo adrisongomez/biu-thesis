@@ -3,12 +3,14 @@
 variable "grafana_admin_user" {
   description = "The admin username for Grafana."
   type        = string
+  default     = "admin"
 }
 
 variable "grafana_admin_password" {
   description = "The admin password for Grafana."
   type        = string
   sensitive   = true # This prevents the value from being shown in logs
+  default     = "admin"
 }
 
 resource "kubernetes_namespace_v1" "namespace_monitoring" {
