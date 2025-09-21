@@ -23,8 +23,7 @@ config:
       traces:
         receivers: [otlp]
         processors: [batch]
-        exporters: [otlp/custom, logging]
+        exporters: [otlp/custom]
       metrics:
         receivers: [otlp]
         processors: [batch]
-        exporters: [logging]
