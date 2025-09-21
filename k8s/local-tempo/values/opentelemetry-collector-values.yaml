@@ -18,6 +18,7 @@ config:
       tls:
         insecure: true
     
+  service:
     pipelines:
       traces:
         receivers: [otlp]
