@@ -28,4 +28,5 @@ terraform.rc
 
 /**/.env
 
-/**/tempo-data/
+**/tempo-data/
+**/__pycache__/
