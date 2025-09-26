@@ -30,3 +30,5 @@ terraform.rc
 
 **/tempo-data/
 **/__pycache__/
+
+venv/
